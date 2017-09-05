@@ -19,8 +19,8 @@ main(int argc, char *argv[])
 
 		ret = MPI_Send(&value, 1, MPI_INT, 1, tag, MPI_COMM_WORLD);
     	}
-    	else {
-        	value = MPI_Recv(&value, 1, MPI_INT, rank-1, tag, MPI_COMM_WORLD, &status);
+	else {
+        	ret = MPI_Recv(&value, 1, MPI_INT, rank-1, tag, MPI_COMM_WORLD, &status);
      		value++;
 
 		if(rank+1 < size)
