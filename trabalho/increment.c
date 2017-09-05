@@ -3,41 +3,31 @@
 #include "mpi.h"
 main(int argc, char *argv[])
 {
-    int ret, rank, size, i, tag;
-    MPI_Status status;
-    int value;
+    	int ret, rank, size, i, tag;
+    	MPI_Status status;
+    	int value = 0;
 
-    ret = MPI_Init(&argc, &argv);
+    	ret = MPI_Init(&argc, &argv);
 
-    ret = MPI_Comm_rank(MPI_COMM_WORLD, &rank);
-    ret = MPI_Comm_size(MPI_COMM_WORLD, &size);
+    	ret = MPI_Comm_rank(MPI_COMM_WORLD, &rank);
+    	ret = MPI_Comm_size(MPI_COMM_WORLD, &size);
 
-    tag=100;
-    /*if (rank == 0)
-    {
-        strcpy(message,"Ola, Mundo!");
+    	tag=100;
+    	if (rank == 0)
+    	{
+		value = 0;
 
-        for (i=0; i<size; i++)
-            ret = MPI_Send(message, 12, MPI_CHAR, i, tag, MPI_COMM_WORLD);
-    }
-    else
-              
-        ret = MPI_Recv(message, 12, MPI_CHAR, 0, tag, MPI_COMM_WORLD, &status);
+		ret = MPI_Send(&value, 1, MPI_INT, 1, tag, MPI_COMM_WORLD);
+    	}
+    	else {
+        	value = MPI_Recv(&value, 1, MPI_INT, rank-1, tag, MPI_COMM_WORLD, &status);
+     		value++;
 
-    printf("Mensagem do no %d : %s\n", rank, message);
-    ret = MPI_Finalize();*/
+		if(rank+1 < size)
+			ret = MPI_Send(&value, 1, MPI_INT, rank+1, tag, MPI_COMM_WORLD);
+    	}
 
-    if (rank == 0)
-    {
-        ret = MPI_Send(value, 12, MPI_INT, 1, tag, MPI_COMM_WORLD);
-    }
+	printf("Valor do no %d: %d\n", rank, value);
 
-    for(int rank=1; i<size; i++) {
-        value = MPI_Recv(value, 12, MPI_INT, 0, tag, MPI_COMM_WORLD, &status);
-        value++;
-
-        printf("Valor do no %d : %d\n", rank, value);
-
-        ret = MPI_Send(value, 12, MPI_INT, rank+1, tag, MPI_COMM_WORLD);
-    }
+	ret = MPI_Finalize();
 }
