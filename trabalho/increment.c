@@ -6,6 +6,7 @@ main(int argc, char *argv[])
     int ret, rank, size, i, tag;
     MPI_Status status;
     int value;
+    int nextRank;
 
     ret = MPI_Init(&argc, &argv);
 
@@ -29,15 +30,23 @@ main(int argc, char *argv[])
 
     if (rank == 0)
     {
-        ret = MPI_Send(value, 12, MPI_INT, 1, tag, MPI_COMM_WORLD);
+        ret = MPI_Send(&value, 1, MPI_INT, 1, tag, MPI_COMM_WORLD);
     }
 
     for(int rank=1; i<size; i++) {
-        value = MPI_Recv(value, 12, MPI_INT, 0, tag, MPI_COMM_WORLD, &status);
+        value = MPI_Recv(&value), 1, MPI_INT, 0, tag, MPI_COMM_WORLD, &status);
         value++;
 
         printf("Valor do no %d : %d\n", rank, value);
 
-        ret = MPI_Send(value, 12, MPI_INT, rank+1, tag, MPI_COMM_WORLD);
+        if(rank+1 = size)
+            nextRank = 0;
+        else
+            nextRank++;
+
+        ret = MPI_Send(&value, 1, MPI_INT, nextRank, tag, MPI_COMM_WORLD);
     }
+
+    //printf("Mensagem do no %d : %s\n", rank, message);
+    ret = MPI_Finalize();
 }
