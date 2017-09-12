@@ -10,6 +10,7 @@ int setNumber()
     int number;
             
     printf("Digite um numero para ser calculado o fatorial:\n");
+    fflush(stdin);
     scanf("%d", &number);
 
     return number;
@@ -19,16 +20,17 @@ int setNumber()
  * Define se o usuário vai definir o número total de cluster
  * @return (char) s/n
  */
-char setCluster()
+bool setCluster()
 {
-    char setCluster;
+    char setedCluster[1];
 
     printf("Deseja digitar o numero de clusters, (s/n)");
-    scanf("%c", &setCluster);
+    fflush(stdin);
+    scanf("%c", &setedCluster);
 
-    if(strcmp(setCluster, "s") == 0)
+    if(strcmp(setedCluster, "s") == 0)
         return true;
-    else if(strcmp(setCluster, "n") == 0)
+    else if(strcmp(setedCluster, "n") == 0)
         return false;
 
     setCluster();
@@ -43,6 +45,7 @@ int setClusterCount()
     int number;
             
     printf("Digite um numero de clusters:\n");
+    fflush(stdin);
     scanf("%d", &number);
 
     return number;
@@ -55,7 +58,7 @@ int setClusterCount()
  * @param  (int)        //Nó Atual
  * @return (int[4])     //Parametros[numero, menorValor, maiorValor, resultado]   
  */
-int[] defineIntervalo(int[4] parametros, int size, int rank)
+int * defineIntervalo(int parametros[], int size, int rank)
 {
     //Menor Valor, recebe o maior valor do anterior + 1
     parametros[1] = parametros[2] + 1;
@@ -78,6 +81,7 @@ int[] defineIntervalo(int[4] parametros, int size, int rank)
  */
 int calculaFatorial(int menor, int maior)
 {
+    int i;	
     int result = 1;
 
     for(i=maior; i>=menor; i--) {

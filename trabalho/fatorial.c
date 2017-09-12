@@ -1,4 +1,6 @@
 #include <stdio.h>
+#include <stdlib.h>
+#include <stdbool.h>
 #include <string.h>
 #include "mpi.h"
 #include "funcoes.h"
@@ -7,16 +9,17 @@ main(int argc, char *argv[])
 {
     int ret,                    //Retorno do MPI
         rank,                   //No atual
+        rankCounter,            //Contador do rank usado no for
         size,                   //Tamanho total do cluster
         i,                      //Iterador para os cluster slave
         tag = 0,                //Tag 0 - Continua calculando fatorial, 1 - Resultado
         clusters,               //Quantidade a ser usada dos clusters
         nextRank,               //Próximo nó
-        parametros[4];          //Parametros[numero, menorValor, maiorValor, resultado]
-        parametrosProximo[4];   //Parametros[numero, menorValor, maiorValor, resultado]
-        resultado = 1;
+        parametros[4],          //Parametros[numero, menorValor, maiorValor, resultado]
+        *parametrosProximo,   //Parametros[numero, menorValor, maiorValor, resultado]
+        result = 1;
 
-    boolean first = true;       //Primeiro nó
+    bool first = true;       //Primeiro nó
 
     MPI_Status status;          //Status MPI
 
@@ -41,7 +44,7 @@ main(int argc, char *argv[])
                 clusters = size;
 
             parametros[1] = 0;                  //Valor menor
-            parametros[2] = (number/size) -1;   //Valor Maior
+            parametros[2] = (parametros[0]/size) -1;   //Valor Maior
 
             //Define que não é mais o primeiro
             first = false;
@@ -89,7 +92,7 @@ main(int argc, char *argv[])
         }
     }
 
-    for(int rank=0; i<clusters; i++) {
+    for(rankCounter=0; i<clusters; i++) {
         //Recebe os valores do no anterior
         ret = MPI_Recv(&parametros, 1, MPI_INT, 0, tag, MPI_COMM_WORLD, &status);
 
@@ -117,6 +120,6 @@ main(int argc, char *argv[])
         ret = MPI_Send(&parametros, 0, MPI_INT, 0, 1, MPI_COMM_WORLD);
     }
 
-    printf("Valor do fatorial de %d: %d", parametros[0], resultado);
+    printf("Valor do fatorial de %d: %d", parametros[0], result);
     ret = MPI_Finalize();
 }
