@@ -24,7 +24,7 @@ char setCluster()
     char setCluster;
 
     printf("Deseja digitar o numero de clusters, (s/n)");
-    scanf("%c", &number);
+    scanf("%c", &setCluster);
 
     if(strcmp(setCluster, "s") == 0)
         return true;
