@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include <stdbool.h>
 #include <string.h>
-#include "mpi.h"
+#include <mpi.h>
 #include "funcoes.h"
 
 main(int argc, char *argv[])
