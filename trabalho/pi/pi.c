@@ -5,18 +5,18 @@ renato.pitarello@gmail.com
 ti@soitic.com
 
 fazer 400000
-criar numero aleatório entre 0 e 9
+criar numero aleatório entre 1 e 9
 dividir por 10
 elevar ao quadrado
 
-criar outro numero aleatorio entre 0 e 9
+criar outro numero aleatorio entre 1 e 9
 dividir por 10
 elevar ao quadrado
 
 se for menor do que 1
  incrementa variavel
 
-dividir por 100.000
+dividir por 100.000 (1/4 do valor de vezes)
  */
 
 #include <stdio.h>
