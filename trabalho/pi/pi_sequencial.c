@@ -3,8 +3,8 @@
 
 void main()
 {
-	int 	vezes=0,
-		i=0;
+	int i=0;
+	unsigned long long int;
 	double 	numA=0.0,
 		numB=0.0,
 		totalIf=0.0,
@@ -17,7 +17,7 @@ void main()
 	printf("Digite o numero de vezes para ralizar o calculo\n");
 	fflush(stdout);
 	fflush(stdin);
-	scanf("%d", &vezes);
+	scanf("%llu", &vezes);
 
 	start = clock();
 
