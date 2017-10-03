@@ -1,3 +1,10 @@
+void iniciaMPI()
+{
+    ret = MPI_Init(&argc, &argv);
+    ret = MPI_Comm_rank(MPI_COMM_WORLD, &rank);
+    ret = MPI_Comm_size(MPI_COMM_WORLD, &size);
+}
+
 unsigned long long int numeroVezes()
 {
     unsigned long long int vezes=0;
