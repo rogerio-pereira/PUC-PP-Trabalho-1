@@ -1,31 +1,29 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <time.h>
 #include <stdbool.h>
-#include <string.h>
 #include <mpi.h>
 #include "funcoes.h"
 
-main(int argc, char *argv[])
+void main(int argc, char *argv[])
 {
     int ret,                    //Retorno do MPI
         rank,                   //No atual
         size,                   //Tamanho total do cluster
         i,                      //Iterador para os cluster slave
-        tag = 0,                //Tag
+        tag = 0;                //Tag
         
     MPI_Status status;          //Status MPI
 
     //Variavies programa
-    int vezes=0,
-        iteradorVezes=0;
-    double  numA=0.0,
-            numB=0.0,
-            totalIf=0.0,
+    unsigned long long int vezes=0;
+    double  totalIf=0.0,
             totalIfFinal=0.0,
             pi=0.0;
     unsigned long microSeconds=0.0;
     float milliSeconds=0.0;
-    int seconds;
+    int j=0,
+        seconds=0;
     clock_t start, end;
     bool first = true;
 
@@ -37,7 +35,10 @@ main(int argc, char *argv[])
     //Nó 0
     if (rank == 0 && first == true)
     {
-        vezes = numeroVezes();
+        printf("Digite o numero de vezes para ralizar o calculo\n");
+        fflush(stdout);
+        fflush(stdin);
+        scanf("%llu", &vezes);
         first = false;
 
         start = clock();
@@ -46,11 +47,12 @@ main(int argc, char *argv[])
             //Envia o comando para o primeiro
             ret = MPI_Send(&vezes, 0, MPI_INT, i, tag, MPI_COMM_WORLD);
         }
-    }
 
-    if(first == true)
+        totalIfFinal = calculaPi(vezes/size);
+    }
+    else
     {
-        for(rankCounter=0; i<clusters; i++) {
+        for(j=0; j<size; i++) {
             ret = MPI_Recv(&vezes, 1, MPI_INT, 0, tag, MPI_COMM_WORLD, &status);
 
             totalIf = calculaPi(vezes/size);
@@ -59,7 +61,8 @@ main(int argc, char *argv[])
             ret = MPI_Send(&totalIf, 0, MPI_INT, 0, tag, MPI_COMM_WORLD);
         }
     }
-    else {
+
+    if(first == false) {
         ret = MPI_Recv(&totalIf, 1, MPI_INT, 0, tag, MPI_COMM_WORLD, &status);
 
         totalIfFinal += totalIf;

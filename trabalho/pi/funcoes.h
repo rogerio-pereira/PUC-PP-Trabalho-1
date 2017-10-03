@@ -1,18 +1,20 @@
-int numeroVezes()
+unsigned long long int numeroVezes()
 {
-    int vezes=0;
+    unsigned long long int vezes=0;
 
     printf("Digite o numero de vezes para ralizar o calculo\n");
     fflush(stdout);
     fflush(stdin);
-    scanf("%d", &vezes);
+    scanf("%llu", &vezes);
 
     return vezes;
 }
 
 int calculaPi(int vezes)
 {
-    int totalIf;
+    int totalIf, i;
+    double  numA,
+            numB;
 
     for(i=0; i<vezes; i++) {
         numA = (double)rand()/RAND_MAX; //valor Aleatorio de 0.0 a 1.0

@@ -15,14 +15,14 @@ main(int argc, char *argv[])
     	tag=100;
     	if (rank == 0)
     	{
-		ret = MPI_Send(&value, 1, MPI_INT, 1, tag, MPI_COMM_WORLD);
+		      ret = MPI_Send(&value, 1, MPI_INT, 1, tag, MPI_COMM_WORLD);
     	}
-	else {
+	    else {
         	ret = MPI_Recv(&value, 1, MPI_INT, rank-1, tag, MPI_COMM_WORLD, &status);
      		value++;
 
-		if(rank+1 < size)
-			ret = MPI_Send(&value, 1, MPI_INT, rank+1, tag, MPI_COMM_WORLD);
+		      if(rank+1 < size)
+			     ret = MPI_Send(&value, 1, MPI_INT, rank+1, tag, MPI_COMM_WORLD);
     	}
 
 	printf("Valor do no %d: %d\n", rank, value);
