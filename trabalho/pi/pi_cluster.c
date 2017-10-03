@@ -16,7 +16,8 @@ void main(int argc, char *argv[])
     MPI_Status status;          //Status MPI
 
     //Variavies programa
-    unsigned long long int vezes=0;
+    unsigned long long int vezes=0,
+                            *param;
     double  totalIf=0.0,
             totalIfFinal=0.0,
             pi=0.0;
@@ -39,13 +40,14 @@ void main(int argc, char *argv[])
         fflush(stdout);
         fflush(stdin);
         scanf("%llu", &vezes);
+        *param = vezes;
         first = false;
 
         start = clock();
 
         for(i=0; i<size; i++) {
             //Envia o comando para o primeiro
-            ret = MPI_Send(&vezes, 0, MPI_INT, i, tag, MPI_COMM_WORLD);
+            ret = MPI_Send(&param, 0, MPI_INT, i, tag, MPI_COMM_WORLD);
         }
 
         totalIfFinal = calculaPi(vezes/size);
@@ -53,7 +55,8 @@ void main(int argc, char *argv[])
     else
     {
         for(j=0; j<size; i++) {
-            ret = MPI_Recv(&vezes, 1, MPI_INT, 0, tag, MPI_COMM_WORLD, &status);
+            ret = MPI_Recv(&param, 1, MPI_INT, 0, tag, MPI_COMM_WORLD, &status);
+            vezes = *param;
 
             totalIf = calculaPi(vezes/size);
 
