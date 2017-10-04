@@ -17,8 +17,8 @@ void main(int argc, char *argv[])
 
     //Variavies programa
     unsigned long long int vezes=0,
-			   *param;
-    double  totalIf=0.0,
+                            *param;
+    double  totalIf,
             totalIfFinal=0.0,
             pi=0.0;
     unsigned long microSeconds=0.0;
@@ -40,27 +40,29 @@ void main(int argc, char *argv[])
         fflush(stdout);
         fflush(stdin);
         scanf("%llu", &vezes);
-
+//	vezes = numeroVezes();
+        param = &vezes;
         first = false;
-
+printf("\n\nAqui\n\n");
         start = clock();
-
+printf("Vezes: %llu. Nó %d", vezes, rank);
+printf("\nparam: %llu", *param);
         for(i=1; i<size; i++) {
             //Envia o comando para o primeiro
-            ret = MPI_Send(&vezes, 1, MPI_UNSIGNED_LONG_LONG, i, tag, MPI_COMM_WORLD);
+printf("\nEnviando para nó %d", i);
+            ret = MPI_Send(&param, 0, MPI_LONG_LONG_INT, i, tag, MPI_COMM_WORLD);
         }
-
-	totalIfFinal = 0.0;
-	totalIf = 0.0;
-
- 	for(j=1; j<size; j++) {
-            ret = MPI_Recv(&totalIf, 1, MPI_DOUBLE, j, tag, MPI_COMM_WORLD, &status);
-printf("Valor %f veio do No %d\n", totalIf, j);
-            totalIfFinal += totalIf;
-        }
-
-        totalIf = calculaPi(vezes/size);
+printf("\n\nAqui2\n\n");
+	totalIf = calculaPi(vezes/size);
         totalIfFinal += totalIf;
+
+//        for(j=1; j<size; j++) {
+            ret = MPI_Recv(&totalIf, 1, MPI_DOUBLE, 1, tag, MPI_COMM_WORLD, &status);
+
+printf("%d", totalIf);
+
+            totalIfFinal += totalIf;
+  //      }
 
         end = clock();
         microSeconds = end - start;
@@ -73,19 +75,17 @@ printf("Valor %f veio do No %d\n", totalIf, j);
         printf("Tempo de execucao em microsegundos %lu\n", microSeconds);
         printf("Tempo de execucao em milisegundos %f\n", milliSeconds);
         printf("Tempo de execucao em segundos: %d\n", seconds);
-
     }
     else
     {
         for(j=1; j<size; j++) {
-	    totalIf = 0;
-            ret = MPI_Recv(&vezes, 1, MPI_UNSIGNED_LONG_LONG, 0, tag, MPI_COMM_WORLD, &status);
-
+            ret = MPI_Recv(&vezes, 1, MPI_LONG_LONG_INT, 0, tag, MPI_COMM_WORLD, &status);
+            //vezes = *param;
 printf("\n\nVezes: %d. No %d\n\n", vezes, rank);
             totalIf = calculaPi(vezes/size);
-printf("\n\nTotal %d no %d\n", totalIf, rank);
+
             //Envia o total para o primeiro
-            ret = MPI_Send(&totalIf, 1, MPI_DOUBLE, 0, tag, MPI_COMM_WORLD);
+            ret = MPI_Send(&totalIf, 0, MPI_DOUBLE, 0, tag, MPI_COMM_WORLD);
         }
     }
 
